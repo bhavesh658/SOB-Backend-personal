@@ -4,9 +4,10 @@ import Banner from "../models/Banner.js";
 //  Create Banner
 export const createBanner = async (req, res) => {
   try {
-    const { image, redirectUrl } = req.body;
+    const { redirectUrl } = req.body;
+    const images = req.files?.map(file => file.filename) || [];
 
-    if (!image) {
+    if (images.length === 0) {
       return res.status(400).json({
         success: false,
         message: "Banner image is required"
@@ -14,7 +15,7 @@ export const createBanner = async (req, res) => {
     }
 
     const banner = await Banner.create({
-      image,
+      image: images[0], // Assuming only one banner image is allowed
       redirectUrl
     });
 
@@ -55,7 +56,7 @@ export const getBanners = async (req, res) => {
 };
 
 
-// ✅ Update Banner (toggle active / edit link)
+//  Update Banner (toggle active / edit link)
 export const updateBanner = async (req, res) => {
   try {
     const banner = await Banner.findById(req.params.id);
@@ -67,9 +68,8 @@ export const updateBanner = async (req, res) => {
       });
     }
 
-    const { image, redirectUrl, isActive } = req.body;
+    const { redirectUrl, isActive } = req.body;
 
-    banner.image = image || banner.image;
     banner.redirectUrl = redirectUrl || banner.redirectUrl;
 
     if (typeof isActive === "boolean") {
@@ -94,7 +94,7 @@ export const updateBanner = async (req, res) => {
 };
 
 
-// ✅ Delete Banner
+//  Delete Banner
 export const deleteBanner = async (req, res) => {
   try {
     const banner = await Banner.findByIdAndDelete(req.params.id);

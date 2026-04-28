@@ -23,7 +23,13 @@ const productSchema = new mongoose.Schema(
     isDeleted: {
       type: Boolean,
       default: false
-    }
+    },
+    rating: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Review"
+      }
+    ]
   },
   { timestamps: true }
 );

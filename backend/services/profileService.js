@@ -26,15 +26,17 @@ export const updateProfile = async (userId, data) => {
 export const addAddress = async (userId, address) => {
   try {
     const user = await User.findById(userId);
+    
 
   user.addresses.push(address);
 
     await user.save();
+     return user.addresses;
   } catch (error) {
     throw new Error("User not found");
   }
 
-  return user.addresses;
+ 
 };
 
 

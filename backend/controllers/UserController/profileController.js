@@ -48,15 +48,18 @@ export const updateProfile = async (req, res) => {
 export const addAddress = async (req, res) => {
   try {
     const addresses = await profileService.addAddress(
+      
       req.user.id,
       req.body
     );
+   
 
     res.status(200).json({
       success: true,
       message: "Address added successfully",
       data: addresses
     });
+    console.log("Response Sent with Addresses:", addresses);  
 
   } catch (error) {
     res.status(500).json({

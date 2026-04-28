@@ -1,34 +1,36 @@
 import Product from "../models/Product.js";
 
 
-// ✅ Add Product
+//  Add Product
 export const createProduct = async (req, res) => {
   try {
-    const { name, price, category, description, stock, images } = req.body;
+    const { name, price, description, stock } = req.body;
 
-    if (!name || !price || !category) {
-      return res.status(400).json({ msg: "Name, price & category required" });
-    }
+    const images = req.files?.map(file => file.filename) || [];
 
     const product = await Product.create({
       name,
       price,
-      category,
       description,
       stock,
-      images: images || []
+      images
     });
 
-    res.status(201).json({ msg: "Product created", product });
+    res.status(201).json({
+      success: true,
+      message: "Product created",
+      data: product
+    });
 
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ msg: "Failed to create product" });
+  } catch (error) {
+    res.status(500).json({
+      message: error.message
+    });
   }
 };
 
 
-// ✅ Get All Products
+//  Get All Products
 export const getProducts = async (req, res) => {
   try {
     const page = +req.query.page || 1;
@@ -48,7 +50,7 @@ export const getProducts = async (req, res) => {
 };
 
 
-// ✅ Update Product
+//  Update Product
 export const updateProduct = async (req, res) => {
   try {
     const product = await Product.findByIdAndUpdate(
@@ -70,7 +72,7 @@ export const updateProduct = async (req, res) => {
 };
 
 
-// ✅ Soft Delete Product
+//  Soft Delete Product
 export const deleteProduct = async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);
