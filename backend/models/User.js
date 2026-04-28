@@ -19,7 +19,21 @@ const userSchema = new mongoose.Schema({
   isBlocked: {
     type: Boolean,
     default: false
+  },
+  addresses: [
+  {
+    name: String,
+    phone: String,
+    addressLine: String,
+    city: String,
+    state: String,
+    pincode: String,
+    isDefault: {
+      type: Boolean,
+      default: false
+    }
   }
+]
 }, { timestamps: true });
 
 export default mongoose.model("User", userSchema);
