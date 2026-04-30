@@ -7,6 +7,7 @@ const orderSchema = new mongoose.Schema(
       ref: "User",
       required: true
     },
+
     products: [
       {
         productId: {
@@ -14,22 +15,45 @@ const orderSchema = new mongoose.Schema(
           ref: "Product"
         },
         quantity: Number,
-        price: Number
+        price: Number // snapshot price
       }
     ],
-    totalAmount: {
-      type: Number,
-      required: true
+
+    // 🔥 NEW (IMPORTANT)
+    address: {
+      name: String,
+      phone: String,
+      addressLine: String,
+      city: String,
+      state: String,
+      pincode: String
     },
-    status: {
+
+    paymentMethod: {
       type: String,
-      enum: ["pending", "shipped", "delivered", "cancelled"],
-      default: "pending"
+      enum: ["COD", "ONLINE"],
+      default: "COD"
     },
+
     paymentStatus: {
       type: String,
       enum: ["pending", "paid", "failed"],
       default: "pending"
+    },
+
+    status: {
+      type: String,
+      enum: ["pending", "confirmed", "shipped", "delivered", "cancelled"],
+      default: "pending"
+    },
+
+    // 🔥 NEW (for dashboard/report)
+    subtotal: Number,
+    tax: Number,
+
+    totalAmount: {
+      type: Number,
+      required: true
     }
   },
   { timestamps: true }
