@@ -1,27 +1,21 @@
-import * as productService from "../../services/productService.js";
+// backend/controllers/productController.js
+// ADD these lines to your existing productController.js
 
-//  Get Single Product
+import * as productDetailService from "../../services/productService.js"; // add at top
+
+// GET /api/products/:id  — public route, no auth needed
 export const getProductById = async (req, res) => {
   try {
     const product = await productService.getProductById(req.params.id);
 
-    if (!product) {
-      return res.status(404).json({
-        success: false,
-        message: "Product not found"
-      });
-    }
-
-    res.status(200).json({
-      success: true,
-      data: product
-    });
+    res.status(200).json({ success: true, data: product });
 
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: "Error fetching product",
-      error: error.message
-    });
+    // Invalid MongoDB ObjectId
+    if (error.name === "CastError") {
+      return res.status(400).json({ success: false, message: "Invalid product ID" });
+    }
+    // Product not found / deleted
+    res.status(404).json({ success: false, message: error.message });
   }
 };
