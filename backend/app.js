@@ -14,7 +14,8 @@ import authRoutes from "./routes/authRoutes.js";
 
 import profileRoutes from "./routes/UserModuleRoutes/profileRoutes.js";
 import UserproductRoutes from "./routes/UserModuleRoutes/productRoutes.js";
-
+import cartRoutes from "./routes/UserModuleRoutes/cartRoutes.js";
+import UserorderRoutes from "./routes/UserModuleRoutes/orderRoutes.js";
 
 
 
@@ -42,7 +43,8 @@ app.use("/api/admin/banners", bannerRoutes);
 app.use("/api/user/profile", profileRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/user/products", UserproductRoutes);
-
+app.use("/api/user/cart", cartRoutes);
+app.use("/api/user/orders", UserorderRoutes);
 
 app.use("/uploads", express.static("uploads"));
 
