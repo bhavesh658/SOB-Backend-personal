@@ -1,21 +1,41 @@
 import Banner from "../models/Banner.js";
+import cloudinary from "../config/cloudinary.js";
 
+const uploadToCloudinary = (fileBuffer) => {
+  return new Promise((resolve, reject) => {
+    const stream = cloudinary.uploader.upload_stream(
+      { folder: "Banners" },
+      (error, result) => {
+        if (error) reject(error);
+        else resolve(result);
+      }
+    );
+
+    stream.end(fileBuffer);
+  });
+};
 
 //  Create Banner
 export const createBanner = async (req, res) => {
   try {
     const { redirectUrl } = req.body;
-    const images = req.files?.map(file => file.filename) || [];
+    let imageUrls = [];
+   
 
-    if (images.length === 0) {
+    if (req.file) {
+  const result = await uploadToCloudinary(req.file.buffer);
+  imageUrls.push(result.secure_url);
+}
+  
+ if(imageUrls.length === 0) {
       return res.status(400).json({
         success: false,
-        message: "Banner image is required"
+        message: "No image uploaded"
       });
     }
-
+    
     const banner = await Banner.create({
-      image: images[0], // Assuming only one banner image is allowed
+      image: imageUrls[0], // Assuming only one banner image is allowed
       redirectUrl
     });
 
