@@ -15,7 +15,7 @@ const router = express.Router();
 
 router.use(protect, isAdmin);
 
-router.post("/upload", upload.single("images"), createBanner);
+router.post("/upload", upload.single("image"), createBanner);
 router.get("/", getBanners);
 router.put("/:id", updateBanner);
 router.delete("/:id", deleteBanner);
