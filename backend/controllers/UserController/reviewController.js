@@ -3,7 +3,8 @@ import * as reviewService from "../../services/reviewService.js";
 // add review
 export const addReview = async (req, res) => {
   try {
-    const { productId, rating, comment } = req.body;
+    const { productId } = req.params;
+    const {  rating, comment } = req.body;
 
     const review = await reviewService.addReview(
       req.user.id,
