@@ -7,7 +7,7 @@ import { protect } from "../../middleware/authMiddleware.js";
 
 const router = express.Router();
 
-router.post("/", protect, addReview);
+router.post("/:productId", protect, addReview);
 router.get("/:productId", getReviews);
 
 export default router;
