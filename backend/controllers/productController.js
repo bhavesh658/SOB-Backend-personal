@@ -18,10 +18,11 @@ const uploadToCloudinary = (fileBuffer) => {
 };
 
 
-//  Add Product
+// Add Product
 export const createProduct = async (req, res) => {
   try {
     const { name, price, description, stock } = req.body;
+
 
    let imageUrls = [];
    
