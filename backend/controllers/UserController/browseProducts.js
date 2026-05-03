@@ -90,4 +90,4 @@ export const browseProducts = async (req, res) => {
       message: error.message
     });
   }
-};
+}; 
