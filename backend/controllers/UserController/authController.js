@@ -73,18 +73,34 @@ export const login = async (req, res) => {
       { expiresIn: "7d" }
     );
 
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+    });
+
     res.status(200).json({
+      success: true,
       msg: "Login successful",
-      token,
-      user: {
-        id: user._id,
-        email: user.email,
-        role: user.role,
-      },
+      token
     });
 
   } catch (error) {
     console.error("Login Error:", error);
     res.status(500).json({ msg: "Server error" });
   }
+};
+
+
+export const logoutUser = (req, res) => {
+  res.cookie("token", "", {
+    httpOnly: true,
+    expires: new Date(0)
+  });
+
+  res.json({
+    success: true,
+    message: "Logged out successfully"
+  });
 };
