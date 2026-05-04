@@ -59,7 +59,6 @@ export const addAddress = async (req, res) => {
       message: "Address added successfully",
       data: addresses
     });
-    console.log("Response Sent with Addresses:", addresses);  
 
   } catch (error) {
     res.status(500).json({
