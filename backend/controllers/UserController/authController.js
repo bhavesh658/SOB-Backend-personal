@@ -2,76 +2,112 @@ import User from "../../models/User.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
+// 🔹 Validators
+const validateRegisterInput = ({ name, email, password }) => {
+  if (!name || !email || !password) {
+    throw new Error("All fields are required");
+  }
+};
+
+const validateLoginInput = ({ email, password }) => {
+  if (!email || !password) {
+    throw new Error("Email and password required");
+  }
+};
+
+// 🔹 User Checks
+const checkUserExists = async (email) => {
+  const user = await User.findOne({ email });
+  if (user) throw new Error("User already exists");
+};
+
+const getUserByEmail = async (email) => {
+  const user = await User.findOne({ email });
+  if (!user) throw new Error("User not found");
+  return user;
+};
+
+const checkBlockedUser = (user) => {
+  if (user.isBlocked) {
+    throw new Error("User is blocked");
+  }
+};
+
+// 🔹 Password
+const hashPassword = (password) => bcrypt.hash(password, 10);
+
+const comparePassword = async (password, hash) => {
+  const isMatch = await bcrypt.compare(password, hash);
+  if (!isMatch) throw new Error("Invalid credentials");
+};
+
+// 🔹 Token
+const generateToken = (user) => {
+  return jwt.sign(
+    { id: user._id, role: user.role },
+    process.env.JWT_SECRET,
+    { expiresIn: "7d" }
+  );
+};
+
+// 🔹 Cookie
+const setAuthCookie = (res, token) => {
+  res.cookie("token", token, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    maxAge: 7 * 24 * 60 * 60 * 1000
+  });
+};
+
+// ======================= CONTROLLERS =======================
+
 // REGISTER
 export const register = async (req, res) => {
   try {
     const { name, email, password } = req.body;
 
-    if (!name || !email || !password) {
-      return res.status(400).json({ msg: "All fields are required" });
-    }
+    validateRegisterInput({ name, email, password });
 
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
-      return res.status(400).json({ msg: "User already exists" });
-    }
+    await checkUserExists(email);
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await hashPassword(password);
 
     const user = await User.create({
       name,
       email,
-      password: hashedPassword,
+      password: hashedPassword
     });
 
     res.status(201).json({
       msg: "User registered successfully",
       user: {
         id: user._id,
-        email: user.email,
-      },
+        email: user.email
+      }
     });
 
   } catch (error) {
-    console.error("Register Error:", error);
-    res.status(500).json({ msg: "Server error" });
+    res.status(400).json({ msg: error.message });
   }
 };
-
 
 // LOGIN
 export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-  
-    if (!email || !password) {
-      return res.status(400).json({ msg: "Email and password required" });
-    }
+    validateLoginInput({ email, password });
 
-  
-    const user = await User.findOne({ email });
-    if (!user) {
-      return res.status(400).json({ msg: "User not found" });
-    }
+    const user = await getUserByEmail(email);
 
-    
-    if (user.isBlocked) {
-      return res.status(403).json({ msg: "User is blocked" });
-    }
+    checkBlockedUser(user);
 
-    
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      return res.status(400).json({ msg: "Invalid credentials" });
-    }
+    await comparePassword(password, user.password);
 
-    
-    const token = jwt.sign(
-      { id: user._id, role: user.role },
-      process.env.JWT_SECRET,
-      { expiresIn: "7d" }
-    );
+    const token = generateToken(user);
+
+    setAuthCookie(res, token);
 
     res.cookie("token", token, {
       httpOnly: true,
@@ -87,12 +123,11 @@ export const login = async (req, res) => {
     });
 
   } catch (error) {
-    console.error("Login Error:", error);
-    res.status(500).json({ msg: "Server error" });
+    res.status(400).json({ msg: error.message });
   }
 };
 
-
+// LOGOUT
 export const logoutUser = (req, res) => {
   res.cookie("token", "", {
     httpOnly: true,
