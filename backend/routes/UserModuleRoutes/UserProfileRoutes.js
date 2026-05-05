@@ -8,7 +8,7 @@ import {
   setDefaultAddress,
   getDefaultAddress,
   checkHasAddress
-} from "../../controllers/UserController/profileController.js";
+} from "../../controllers/User/UserProfileController.js";
 
 import { protect } from "../../middleware/authMiddleware.js";
 

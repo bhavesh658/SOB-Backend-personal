@@ -5,21 +5,21 @@ import cookieParser from "cookie-parser";
 
 
 
-import userRoutes from "./routes/userRoutes.js";
-import productRoutes from "./routes/productRoutes.js";
-import categoryRoutes from "./routes/categoryRoutes.js";
-import orderRoutes from "./routes/orderRoutes.js";
-import dashboardRoutes from "./routes/dashboardRoutes.js";
-import reviewRoutes from "./routes/reviewRoutes.js";
-import bannerRoutes from "./routes/bannerRoutes.js";
+import userRoutes from "./routes/AdminModuleRoutes/userRoutes.js";
+import productRoutes from "./routes/AdminModuleRoutes/productRoutes.js";
+import categoryRoutes from "./routes/AdminModuleRoutes/categoryRoutes.js";
+import orderRoutes from "./routes/AdminModuleRoutes/orderRoutes.js";
+import dashboardRoutes from "./routes/AdminModuleRoutes/dashboardRoutes.js";
+import reviewRoutes from "./routes/AdminModuleRoutes/reviewRoutes.js";
+import bannerRoutes from "./routes/AdminModuleRoutes/bannerRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
-import reportRoutes from "./routes/reportRoutes.js";
+import reportRoutes from "./routes/AdminModuleRoutes/reportRoutes.js";
 
-import profileRoutes from "./routes/UserModuleRoutes/profileRoutes.js";
-import UserproductRoutes from "./routes/UserModuleRoutes/productRoutes.js";
-import cartRoutes from "./routes/UserModuleRoutes/cartRoutes.js";
-import UserorderRoutes from "./routes/UserModuleRoutes/orderRoutes.js";
-import UserreviewRoutes from "./routes/UserModuleRoutes/reviewRoutes.js";
+import profileRoutes from "./routes/UserModuleRoutes/UserProfileRoutes.js";
+import UserproductRoutes from "./routes/UserModuleRoutes/UserProductRoutes.js";
+import cartRoutes from "./routes/UserModuleRoutes/UserCartRoutes.js";
+import UserorderRoutes from "./routes/UserModuleRoutes/UserOrderRoutes.js";
+import UserreviewRoutes from "./routes/UserModuleRoutes/UserReviewRoutes.js";
 
 
 
@@ -52,7 +52,6 @@ app.use("/api/admin/reports", reportRoutes);
 // User Routes
 app.use("/api/user/profile", profileRoutes);
 app.use("/api/auth", authRoutes);
-
 app.use("/api/user/products", UserproductRoutes);
 app.use("/api/user/cart", cartRoutes);
 app.use("/api/user/orders", UserorderRoutes);

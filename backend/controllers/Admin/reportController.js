@@ -1,5 +1,5 @@
-import Order from "../models/Order.js";
-import User from "../models/User.js";
+import Order from "../../models/Order.js";
+import User from "../../models/User.js";
 
 //  SALES REPORT
 export const getSalesReport = async (req, res) => {

@@ -1,39 +1,44 @@
 import User from "../models/User.js";
 
 // ===== PIN CODE VALIDATION =====
-// Supports Indian (6 digits) and international formats
 const validatePinCode = (pincode) => {
-  // Indian format: 6 digits
-  // International: 3-10 alphanumeric
   const pinRegex = /^[a-zA-Z0-9\s\-]{3,10}$/;
   return pinRegex.test(pincode);
 };
 
 // ===== ADDRESS VALIDATION =====
-const validateAddress = (address) => {
-  const { name, phone, addressLine, city, state, pincode } = address;
+const isValidName = (name) =>
+  name && name.length >= 2 && name.length <= 100;
 
-  if (!name || !phone || !addressLine || !city || !state || !pincode) {
+const isValidPhone = (phone) =>
+  /^[0-9]{10}$/.test(phone);
+
+const hasRequiredFields = (address) => {
+  const { name, phone, addressLine, city, state, pincode } = address;
+  return name && phone && addressLine && city && state && pincode;
+};
+
+
+// ================= MAIN VALIDATOR =================
+export const validateAddress = (address) => {
+  if (!hasRequiredFields(address)) {
     throw new Error("All address fields are required");
   }
 
-  if (name.length < 2 || name.length > 100) {
+  if (!isValidName(address.name)) {
     throw new Error("Name must be between 2-100 characters");
   }
 
-  // Phone: 10 digits
-  if (!/^[0-9]{10}$/.test(phone)) {
+  if (!isValidPhone(address.phone)) {
     throw new Error("Phone must be 10 digits");
   }
 
-  // Validate pin code
-  if (!validatePinCode(pincode)) {
+  if (!validatePinCode(address.pincode)) {
     throw new Error("Invalid pin code format (must be 3-10 characters)");
   }
 
   return true;
 };
-
 // Get Profile
 export const getProfile = async (userId) => {
   try {
@@ -148,7 +153,7 @@ export const deleteAddress = async (userId, index) => {
 
     // If deleted address was default and there are still addresses
     if (deletedAddress.isDefault && user.addresses.length > 0) {
-      user.addresses[0].isDefault = true; // Auto-set first as default
+      user.addresses[0].isDefault = true; 
     }
 
     await user.save();

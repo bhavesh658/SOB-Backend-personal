@@ -1,6 +1,6 @@
-import Product from "../models/Product.js";
+import Product from "../../models/Product.js";
 
-import cloudinary from "../config/cloudinary.js";
+import cloudinary from "../../config/cloudinary.js";
 
 
 const uploadToCloudinary = (fileBuffer) => {

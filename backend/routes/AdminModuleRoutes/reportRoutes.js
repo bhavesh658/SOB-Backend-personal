@@ -2,9 +2,9 @@ import express from "express";
 import {
   getSalesReport,
   getUserReport
-} from "../controllers/reportController.js";
-import { protect } from "../middleware/authMiddleware.js";
-import { isAdmin } from "../middleware/adminMiddleware.js";
+} from "../../controllers/Admin/reportController.js";
+import { protect } from "../../middleware/authMiddleware.js";
+import { isAdmin } from "../../middleware/adminMiddleware.js";
 
 const router = express.Router();
 
