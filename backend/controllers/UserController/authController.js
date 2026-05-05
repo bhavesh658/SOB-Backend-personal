@@ -15,11 +15,14 @@ const generateToken = (userId) => {
 // ===== AUTHENTICATION CONTROLLERS =====
 
 // 1. REGISTER
+// backend/controllers/UserController/authController.js
+// Only the register function changes — everything else stays the same
+
 export const register = async (req, res) => {
   try {
-    const { name, email, password, confirmPassword } = req.body;
+    const { name, email, password, confirmPassword, role } = req.body;
 
-    // Validation
+    // Validation — all fields required
     if (!name || !email || !password || !confirmPassword) {
       return res.status(400).json({
         success: false,
@@ -41,6 +44,10 @@ export const register = async (req, res) => {
       });
     }
 
+    // Validate role — only allow "user" or "admin"
+    const allowedRoles = ["user", "admin"];
+    const assignedRole = role && allowedRoles.includes(role) ? role : "user"; // default = "user"
+
     // Check if user already exists
     const existingUser = await User.findOne({ email: email.toLowerCase() });
     if (existingUser) {
@@ -53,21 +60,22 @@ export const register = async (req, res) => {
     // Hash password
     const hashedPassword = await bcryptjs.hash(password, 10);
 
-    // Create new user
+    // Create new user with role
     const newUser = await User.create({
       name,
       email: email.toLowerCase(),
       password: hashedPassword,
+      role: assignedRole, // ← role saved here
     });
 
     res.status(201).json({
       success: true,
       message: "User registered successfully. Please login to continue.",
       user: {
-        id: newUser._id,
-        name: newUser.name,
+        id:    newUser._id,
+        name:  newUser.name,
         email: newUser.email,
-        role: newUser.role,
+        role:  newUser.role, // ← role returned here
       },
     });
   } catch (error) {

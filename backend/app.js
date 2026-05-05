@@ -11,7 +11,9 @@ import bannerRoutes from "./routes/bannerRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 
 import profileRoutes from "./routes/UserModuleRoutes/profileRoutes.js";
-import UserproductRoutes from "./routes/UserModuleRoutes/productRoutes.js";
+import productRoutess from "./routes/UserModuleRoutes/productRoutes.js";
+import productBrowseRoutes from "./routes/UserModuleRoutes/productBrowseRoutes.js";
+
 
 const app = express();
 
@@ -38,9 +40,13 @@ app.use("/api/admin/banners", bannerRoutes);
 // User Routes
 app.use("/api/user/profile", profileRoutes);
 app.use("/api/auth", authRoutes);
-app.use("/api/user/products", UserproductRoutes);
+
+app.use("/api/user/products", productRoutess);
+// user browsing
+app.use("/api/user/productsBrowse", productBrowseRoutes);
 
 app.use("/uploads", express.static("uploads"));
+
 
 app.get("/", (req, res) => {
   res.send("API Running...");

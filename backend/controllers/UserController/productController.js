@@ -6,7 +6,7 @@ import * as productDetailService from "../../services/productService.js"; // add
 // GET /api/products/:id  — public route, no auth needed
 export const getProductById = async (req, res) => {
   try {
-    const product = await productService.getProductById(req.params.id);
+    const product = await productDetailService.getProductById(req.params.id);
 
     res.status(200).json({ success: true, data: product });
 

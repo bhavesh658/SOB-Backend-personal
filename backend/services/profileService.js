@@ -69,7 +69,7 @@ export const updateProfile = async (userId, data) => {
     };
 
     return await User.findByIdAndUpdate(userId, updateData, {
-      new: true,
+      returnDocument: 'after',  // ✅
       runValidators: true,
     }).select("-password");
   } catch (error) {
