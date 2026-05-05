@@ -42,7 +42,9 @@ const userSchema = new mongoose.Schema({
       default: false
     }
   }
-]
+],
+resetPasswordOTP: String,
+resetPasswordExpire: Date,
 }, { timestamps: true });
 
 export default mongoose.model("User", userSchema);

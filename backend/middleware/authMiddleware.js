@@ -1,12 +1,10 @@
 import jwt from "jsonwebtoken";
 
-const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key-change-in-env";
-
 // Verify JWT Token
 export const protect = (req, res, next) => {
   try {
     // Get token from cookie or Authorization header
-    const token = req.cookies.token || req.headers.authorization?.split(" ")[1];
+    const token = req.cookies.token;
 
     if (!token) {
       return res.status(401).json({
@@ -16,9 +14,10 @@ export const protect = (req, res, next) => {
     }
 
     // Verify token
-    const decoded = jwt.verify(token, JWT_SECRET);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
     req.user = decoded;
     next();
+
   } catch (error) {
     res.status(401).json({
       success: false,

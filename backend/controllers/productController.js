@@ -1,19 +1,46 @@
 import Product from "../models/Product.js";
 
+import cloudinary from "../config/cloudinary.js";
 
-//  Add Product
+
+const uploadToCloudinary = (fileBuffer) => {
+  return new Promise((resolve, reject) => {
+    const stream = cloudinary.uploader.upload_stream(
+      { folder: "products" },
+      (error, result) => {
+        if (error) reject(error);
+        else resolve(result);
+      }
+    );
+
+    stream.end(fileBuffer);
+  });
+};
+
+
+// Add Product
 export const createProduct = async (req, res) => {
   try {
     const { name, price, description, stock } = req.body;
 
-    const images = req.files?.map(file => file.filename) || [];
+
+   let imageUrls = [];
+   
+
+    if (req.files) {
+      for (let file of req.files) {
+        const result = await uploadToCloudinary(file.buffer);
+        imageUrls.push(result.secure_url);
+      }
+    }
+  
 
     const product = await Product.create({
       name,
       price,
       description,
       stock,
-      images
+      images:imageUrls
     });
 
     res.status(201).json({
