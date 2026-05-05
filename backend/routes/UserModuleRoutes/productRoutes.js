@@ -1,3 +1,4 @@
+// backend/routes/productRoutes.js
 import express from "express";
 import { getProductById } from "../../controllers/UserController/productController.js";
 import { browseProducts } from "../../controllers/UserController/browseController.js";

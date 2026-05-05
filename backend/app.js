@@ -15,7 +15,6 @@ import bannerRoutes from "./routes/bannerRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import reportRoutes from "./routes/reportRoutes.js";
 
-
 import profileRoutes from "./routes/UserModuleRoutes/profileRoutes.js";
 import UserproductRoutes from "./routes/UserModuleRoutes/productRoutes.js";
 import cartRoutes from "./routes/UserModuleRoutes/cartRoutes.js";
@@ -29,11 +28,15 @@ import UserreviewRoutes from "./routes/UserModuleRoutes/reviewRoutes.js";
 
 const app = express();
 
-app.use(cors());
+// Middleware
+app.use(
+  cors({
+    origin: process.env.FRONTEND_URL || "http://localhost:3000",
+    credentials: true, // Allow cookies
+  }),
+);
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(cookieParser());
-
+app.use(cookieParser()); // Parse cookies
 
 //Admin Routes
 
@@ -49,6 +52,7 @@ app.use("/api/admin/reports", reportRoutes);
 // User Routes
 app.use("/api/user/profile", profileRoutes);
 app.use("/api/auth", authRoutes);
+
 app.use("/api/user/products", UserproductRoutes);
 app.use("/api/user/cart", cartRoutes);
 app.use("/api/user/orders", UserorderRoutes);
