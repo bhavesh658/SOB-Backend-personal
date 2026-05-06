@@ -1,5 +1,5 @@
-import Banner from "../models/Banner.js";
-import cloudinary from "../config/cloudinary.js";
+import Banner from "../../models/Banner.js";
+import cloudinary from "../../config/cloudinary.js";
 
 const uploadToCloudinary = (fileBuffer) => {
   return new Promise((resolve, reject) => {

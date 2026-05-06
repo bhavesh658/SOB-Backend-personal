@@ -1,6 +1,6 @@
 import * as profileService from "../../services/profileService.js";
 
-//  Get Profile
+// Get Profile
 export const getProfile = async (req, res) => {
   try {
     const user = await profileService.getProfile(req.user.id);
@@ -9,18 +9,15 @@ export const getProfile = async (req, res) => {
       success: true,
       data: user
     });
-
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: "Failed to fetch profile",
-      error: error.message
+      message: error.message
     });
   }
 };
 
-
-//  Update Profile
+// Update Profile
 export const updateProfile = async (req, res) => {
   try {
     const user = await profileService.updateProfile(
@@ -33,50 +30,64 @@ export const updateProfile = async (req, res) => {
       message: "Profile updated successfully",
       data: user
     });
-
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: "Failed to update profile",
-      error: error.message
+      message: error.message
     });
   }
 };
 
-
-//  Add Address
+// Add Address
 export const addAddress = async (req, res) => {
   try {
     const addresses = await profileService.addAddress(
-      
       req.user.id,
       req.body
     );
-   
 
-    res.status(200).json({
+    res.status(201).json({
       success: true,
       message: "Address added successfully",
       data: addresses
     });
-    console.log("Response Sent with Addresses:", addresses);  
-
   } catch (error) {
-    res.status(500).json({
+    res.status(400).json({
       success: false,
-      message: "Failed to add address",
-      error: error.message
+      message: error.message
     });
   }
 };
 
+// Update Address
+export const updateAddress = async (req, res) => {
+  try {
+    const { index } = req.params;
+    const addresses = await profileService.updateAddress(
+      req.user.id,
+      parseInt(index),
+      req.body
+    );
 
-//  Delete Address
+    res.status(200).json({
+      success: true,
+      message: "Address updated successfully",
+      data: addresses
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error.message
+    });
+  }
+};
+
+// Delete Address
 export const deleteAddress = async (req, res) => {
   try {
     const addresses = await profileService.deleteAddress(
       req.user.id,
-      req.params.index
+      parseInt(req.params.index)
     );
 
     res.status(200).json({
@@ -84,23 +95,20 @@ export const deleteAddress = async (req, res) => {
       message: "Address deleted successfully",
       data: addresses
     });
-
   } catch (error) {
-    res.status(500).json({
+    res.status(400).json({
       success: false,
-      message: "Failed to delete address",
-      error: error.message
+      message: error.message
     });
   }
 };
-
 
 // Set Default Address
 export const setDefaultAddress = async (req, res) => {
   try {
     const addresses = await profileService.setDefaultAddress(
       req.user.id,
-      req.params.index
+      parseInt(req.params.index)
     );
 
     res.status(200).json({
@@ -108,12 +116,44 @@ export const setDefaultAddress = async (req, res) => {
       message: "Default address updated",
       data: addresses
     });
-
   } catch (error) {
-    res.status(500).json({
+    res.status(400).json({
       success: false,
-      message: "Failed to set default address",
-      error: error.message
+      message: error.message
+    });
+  }
+};
+
+// Get Default Address
+export const getDefaultAddress = async (req, res) => {
+  try {
+    const defaultAddress = await profileService.getDefaultAddress(req.user.id);
+
+    res.status(200).json({
+      success: true,
+      data: defaultAddress
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error.message
+    });
+  }
+};
+
+// Check if user has address (for checkout)
+export const checkHasAddress = async (req, res) => {
+  try {
+    const hasAddress = await profileService.hasAddress(req.user.id);
+
+    res.status(200).json({
+      success: true,
+      hasAddress: hasAddress
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error.message
     });
   }
 };

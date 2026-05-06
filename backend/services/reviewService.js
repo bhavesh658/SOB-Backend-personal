@@ -25,7 +25,8 @@ export const addReview = async (userId, productId, rating, comment) => {
     userId,
     productId,
     rating,
-    comment
+    comment,
+    status: "pending"
   });
 
   return review;
@@ -33,7 +34,7 @@ export const addReview = async (userId, productId, rating, comment) => {
 
 //  Get Reviews
 export const getProductReviews = async (productId) => {
-  return await Review.find({ productId })
+  return await Review.find({ productId,status:"approved" })
     .populate("userId", "name")
     .sort({ createdAt: -1 });
 };

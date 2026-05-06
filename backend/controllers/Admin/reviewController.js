@@ -1,4 +1,4 @@
-import Review from "../models/Review.js";
+import Review from "../../models/Review.js";
 
 
 //  Get All Reviews

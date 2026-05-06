@@ -17,8 +17,12 @@ export const addToCart = async (req, res) => {
 
 // get cart
 export const getCart = async (req, res) => {
-  const cart = await cartService.getCart(req.user.id);
-  res.json(cart);
+  try {
+    const cart = await cartService.getCart(req.user.id);
+    res.json(cart);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 };
 
 // update
@@ -38,6 +42,8 @@ export const updateCart = async (req, res) => {
 
 // delete
 export const removeItem = async (req, res) => {
+
+  try {
   const cart = await cartService.removeCartItem(
     req.user.id,
     req.params.productId
@@ -48,4 +54,7 @@ export const removeItem = async (req, res) => {
     cart,
     message: "Item removed from cart successfully"
   } );
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
 };

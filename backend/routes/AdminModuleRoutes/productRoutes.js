@@ -4,13 +4,13 @@ import {
   getProducts,
   updateProduct,
   deleteProduct
-} from "../controllers/productController.js";
+} from "../../controllers/Admin/productController.js";
 
-import { upload } from "../middleware/uploadMiddleware.js";
+import { upload } from "../../middleware/uploadMiddleware.js";
 // import { createProducts } from "../controllers/productController.js";
 
-import { protect } from "../middleware/authMiddleware.js";
-import { isAdmin } from "../middleware/adminMiddleware.js";
+import { protect } from "../../middleware/authMiddleware.js";
+import { isAdmin } from "../../middleware/adminMiddleware.js";
 
 const router = express.Router();
 
